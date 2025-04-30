@@ -17,7 +17,6 @@ connectDB();
 const allowedOrigins = [
   "https://chefdelightsfoods.com",
   "https://www.chefdelightsfoods.com",
-  "http://localhost:3000",
   "http://13.61.182.49"
 ];
 
