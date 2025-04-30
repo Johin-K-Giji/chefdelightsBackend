@@ -3,7 +3,7 @@ const cors = require("cors");
 const app = express();
 const productRoutes = require("./routes/productRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
-const orderRoutes= require("./routes/orderRoutes")
+const orderRoutes= require("./routes/orderRoutes");
 const authRoutes = require("./routes/authRoutes");
 const path = require("path");
 require("dotenv").config();
@@ -15,8 +15,9 @@ connectDB();
 
 // Enable CORS
 const allowedOrigins = [
-  "https://chefs-delights.vercel.app",
+  "https://chefdelightsfoods.com/",
   "http://localhost:3000",
+  "13.61.182.49"
 ];
 
 app.use(cors({
@@ -30,7 +31,6 @@ app.use(cors({
   credentials: true,
 }));
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -42,8 +42,8 @@ app.use('/static/products', express.static(path.join(__dirname, 'uploads/product
 // Use Routes
 app.use("/api/products", productRoutes);
 app.use("/api/payment", paymentRoutes);
-app.use("/api/orders",orderRoutes)
-app.use('/api/auth',authRoutes)
+app.use("/api/orders", orderRoutes);
+app.use('/api/auth', authRoutes);
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");
