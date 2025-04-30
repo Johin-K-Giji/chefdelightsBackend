@@ -45,6 +45,6 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/orders", orderRoutes);
 app.use('/api/auth', authRoutes);
 
-app.listen(5000, () => {
+app.listen(4000, () => {
   console.log("Server running on port 5000");
 });
