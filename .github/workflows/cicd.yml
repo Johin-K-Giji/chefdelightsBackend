@@ -23,16 +23,22 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: self-hosted 
+    runs-on: self-hosted
     steps:
       - name: Show Disk Usage Before Cleanup
         run: df -h
 
       - name: Full Docker Cleanup (containers, images, volumes)
         run: |
-          echo "Cleaning all Docker artifacts..."
+          echo "Cleaning up Docker artifacts..."
           docker system prune -af --volumes || true
           sudo rm -rf /var/lib/docker/tmp/* || true
+          # Remove all unused images
+          docker images -q | xargs docker rmi -f || true
+          # Remove all stopped containers
+          docker ps -a -q --filter "status=exited" | xargs docker rm -f || true
+          # Clean up dangling volumes (volumes not attached to any container)
+          docker volume prune -f || true
           echo "Disk usage after cleanup:"
           df -h
 
