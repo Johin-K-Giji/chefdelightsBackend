@@ -16,13 +16,14 @@ connectDB();
 // Enable CORS
 const allowedOrigins = [
   "https://chefdelightsfoods.com",
-  "https://www.chefdelightsfoods.com", // Add if you're also accessing with www
+  "https://www.chefdelightsfoods.com", // optional if needed
   "http://localhost:3000",
   "http://13.61.182.49"
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
+    console.log("CORS origin request:", origin); // helpful for debugging
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -31,6 +32,10 @@ app.use(cors({
   },
   credentials: true,
 }));
+
+// Handle preflight requests for all routes
+app.options('*', cors());
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
