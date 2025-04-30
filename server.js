@@ -16,8 +16,9 @@ connectDB();
 // Enable CORS
 const allowedOrigins = [
   "https://chefdelightsfoods.com",
+  "https://www.chefdelightsfoods.com", // Add if you're also accessing with www
   "http://localhost:3000",
-  "13.61.182.49"
+  "http://13.61.182.49"
 ];
 
 app.use(cors({
