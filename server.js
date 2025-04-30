@@ -16,7 +16,7 @@ connectDB();
 // Enable CORS
 const allowedOrigins = [
   "https://chefdelightsfoods.com",
-  "https://www.chefdelightsfoods.com", 
+  "https://www.chefdelightsfoods.com",
   "http://localhost:3000",
   "http://13.61.182.49"
 ];
@@ -24,12 +24,14 @@ const allowedOrigins = [
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
+      callback(null, origin);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.use(express.json());
