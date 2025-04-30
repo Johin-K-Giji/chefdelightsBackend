@@ -21,29 +21,30 @@ jobs:
       - name: Push Image to Docker Hub
         run: docker push johin12/chefdelightsbackend-app:latest
 
-  deploy:
-    needs: build
-    runs-on: self-hosted 
-    steps:
-      - name: Show Disk Usage Before Cleanup
-        run: df -h
+deploy:
+  needs: build
+  runs-on: self-hosted 
+  steps:
+    - name: Show Disk Usage Before Cleanup
+      run: df -h
 
-      - name: Clean Docker Space
-        run: |
-          echo "Cleaning up unused Docker resources..."
-          docker system prune -af --volumes || true
-          echo "Disk usage after cleanup:"
-          df -h
+    - name: Full Docker Cleanup (containers, images, volumes)
+      run: |
+        echo "Cleaning all Docker artifacts..."
+        docker system prune -af --volumes || true
+        sudo rm -rf /var/lib/docker/tmp/* || true
+        echo "Disk usage after cleanup:"
+        df -h
 
-      - name: Pull Image from Docker Hub
-        run: docker pull johin12/chefdelightsbackend-app:latest 
+    - name: Pull Image from Docker Hub
+      run: docker pull johin12/chefdelightsbackend-app:latest 
 
-      - name: Stop and Remove Old Container (if exists)
-        run: docker rm -f nodejs-app-container || true
+    - name: Stop and Remove Old Container (if exists)
+      run: docker rm -f nodejs-app-container || true
 
-      - name: Run Docker Container
-        run: |
-          docker run -d -p 4000:4000 \
-            --name nodejs-app-container \
-            -e MONGO_URI='${{ secrets.MONGO_URI }}' \
-            johin12/chefdelightsbackend-app:latest
+    - name: Run Docker Container
+      run: |
+        docker run -d -p 4000:4000 \
+          --name nodejs-app-container \
+          -e MONGO_URI='${{ secrets.MONGO_URI }}' \
+          johin12/chefdelightsbackend-app:latest
