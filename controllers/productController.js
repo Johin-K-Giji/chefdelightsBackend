@@ -20,8 +20,7 @@ const createProduct = async (req, res) => {
       coverImage,
       subImages,
     });
-    console.log("Cover Image Filename:", coverImage); 
-    console.log("Cover Image Full Path:", path.join(__dirname, "..", "uploads", coverImage));
+
     await newProduct.save();
     res.status(201).json(newProduct);
   } catch (error) {
