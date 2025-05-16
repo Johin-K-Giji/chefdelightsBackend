@@ -36,7 +36,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // ✅ Serve uploaded images
-app.use('/static/products', express.static(path.join(__dirname, 'uploads')));
+app.use('/static/products', express.static(path.join(__dirname, 'uploads/products')));
 
 // ✅ Mount productRoutes FIRST — to avoid JSON parsing on file uploads
 app.use("/api/products", productRoutes);
