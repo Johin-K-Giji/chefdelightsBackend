@@ -26,6 +26,7 @@ const createProduct = async (req, res) => {
     console.log("Cover Image Full Path:", path.join(__dirname, "..", "uploads", coverImage));
     res.status(201).json(newProduct);
   } catch (error) {
+    console.error("Create Product Error:", error);
     res.status(500).json({ message: error.message });
   }
 };
