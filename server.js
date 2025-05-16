@@ -1,12 +1,13 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const path = require("path");
+require("dotenv").config();
+
 const productRoutes = require("./routes/productRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const authRoutes = require("./routes/authRoutes");
-const path = require("path");
-require("dotenv").config();
 
 const connectDB = require("./config/db");
 connectDB();
@@ -32,26 +33,24 @@ const corsOptions = {
   credentials: true
 };
 
-
-
-
-// Use CORS
 app.use(cors(corsOptions));
 
-// Parse JSON and form data
+// ✅ Serve uploaded images
+app.use('/static/products', express.static(path.join(__dirname, 'uploads/products')));
+
+// ✅ Mount productRoutes FIRST — to avoid JSON parsing on file uploads
+app.use("/api/products", productRoutes);
+
+// ✅ Apply JSON parsing only AFTER file-upload routes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve uploaded images
-app.use('/static/products', express.static(path.join(__dirname, 'uploads/products')));
-
-// Routes
-app.use("/api/products", productRoutes);
+// Other routes that expect JSON
 app.use("/api/payment", paymentRoutes);
 app.use("/api/orders", orderRoutes);
-app.use('/api/auth', authRoutes);
+app.use("/api/auth", authRoutes);
 
-// Start server
+// ✅ Start server
 app.listen(4000, () => {
   console.log("Server running on port 4000");
 });

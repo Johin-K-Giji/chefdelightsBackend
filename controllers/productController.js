@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const path = require("path");
 
 // Create a new product
 const createProduct = async (req, res) => {
@@ -20,8 +21,9 @@ const createProduct = async (req, res) => {
       coverImage,
       subImages,
     });
-
     await newProduct.save();
+    console.log("Cover Image Filename:", coverImage); 
+    console.log("Cover Image Full Path:", path.join(__dirname, "..", "uploads", coverImage));
     res.status(201).json(newProduct);
   } catch (error) {
     res.status(500).json({ message: error.message });
