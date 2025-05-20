@@ -4,15 +4,31 @@ const path = require("path");
 // Create a new product
 const createProduct = async (req, res) => {
   try {
-    console.log(req.body);  // Log the incoming request body
-    console.log(req.files);  // Log the uploaded files
+    console.log("🔵 Incoming Body:", req.body);
+    console.log("🟡 Incoming Files:", req.files);
+
     const { name, price, description } = req.body;
-    const coverImage = req.files?.coverImage?.[0]?.filename; // Correct field name
-    const subImages = req.files?.subImages?.map(file => file.filename) || []; // Correct field name
+
+    const coverImage = req.files?.coverImage?.[0]?.filename;
+    const subImagesArray = req.files?.subImages || [];
 
     if (!coverImage) {
+      console.error("❌ Cover image is missing.");
       return res.status(400).json({ message: "Cover image is required." });
     }
+
+    // Log details of subImages if available
+    if (subImagesArray.length === 0) {
+      console.warn("⚠️ No subImages were uploaded.");
+    } else {
+      console.log("📁 SubImages Details:");
+      subImagesArray.forEach((file, index) => {
+        console.log(`   - [${index}] Filename: ${file.filename}`);
+        console.log(`     Full path: ${path.join(__dirname, "..", "uploads", "products", file.filename)}`);
+      });
+    }
+
+    const subImages = subImagesArray.map(file => file.filename);
 
     const newProduct = new Product({
       name,
@@ -21,12 +37,16 @@ const createProduct = async (req, res) => {
       coverImage,
       subImages,
     });
+
     await newProduct.save();
-    console.log("Cover Image Filename:", coverImage); 
-    console.log("Cover Image Full Path:", path.join(__dirname, "..", "uploads", coverImage));
+
+    console.log("✅ Product created successfully.");
+    console.log("🖼️ Cover Image Filename:", coverImage);
+    console.log("📍 Cover Image Full Path:", path.join(__dirname, "..", "uploads", "products", coverImage));
+
     res.status(201).json(newProduct);
   } catch (error) {
-    console.error("Create Product Error:", error);
+    console.error("🔥 Create Product Error:", error);
     res.status(500).json({ message: error.message });
   }
 };
