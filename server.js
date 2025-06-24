@@ -16,7 +16,8 @@ connectDB();
 const allowedOrigins = [
   "https://chefdelightsfoods.com",
   "https://www.chefdelightsfoods.com",
-  "http://13.61.182.49"
+  "http://13.61.182.49" ,
+  "http://localhost:3000",
 ];
 
 // Set up CORS

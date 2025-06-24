@@ -52,4 +52,5 @@ jobs:
             -e MONGO_URI="${{ secrets.MONGO_URI }}" \
             -e RAZORPAY_KEY_ID="${{ secrets.RAZORPAY_KEY_ID }}" \
             -e RAZORPAY_KEY_SECRET="${{ secrets.RAZORPAY_KEY_SECRET }}" \
+            -v /home/ubuntu/ChefsDelights/backend/uploads/products:/app/uploads/products \
             johin12/chefdelightsbackend-app:latest
